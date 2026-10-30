@@ -26,18 +26,21 @@ jobs:
           java-version: 17
 
       - name: Install dependencies
+        working-directory: ./expense-manager
         run: npm install
 
       - name: Generate Android project
+        working-directory: ./expense-manager
         run: npx expo prebuild --platform android --no-install
 
-      - name: Build APK
-        working-directory: android
+      - name: Build release APK
+        working-directory: ./expense-manager/android
         run: ./gradlew assembleRelease --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: expense-manager-apk
-          path: android/app/build/outputs/apk/release/*.apk
+          path: expense-manager/android/app/build/outputs/apk/release/*.apk
+          if-no-files-found: error
           
